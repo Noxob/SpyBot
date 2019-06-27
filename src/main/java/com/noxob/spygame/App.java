@@ -39,8 +39,8 @@ public class App
     {
     	
         try {
-            jda  = new JDABuilder(AccountType.BOT).setToken("INSERT-YOUR-TOKEN-HERE").buildBlocking();
-        } catch (LoginException e) {
+            jda  = new JDABuilder(AccountType.BOT).setToken("INSERT-YOUR-TOKEN-HERE").buildBlocking(); 
+        } catch (LoginException e) { 
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
