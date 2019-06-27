@@ -11,5 +11,11 @@ This is a Discord bot that let's you play the boardgame SpyFall.
 
 3- Play the game.
 
+
+# Made with ♥ and
+[Java](https://www.java.com/)
+[JDA](https://github.com/DV8FromTheWorld/JDA)
+
+
 # Disclaimer
 I have no connection to creators of the game SpyFall.
