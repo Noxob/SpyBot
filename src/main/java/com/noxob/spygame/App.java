@@ -26,7 +26,7 @@ public class App
 	public static boolean started = false;
 	public static long startTime;
 	public static TextChannel channel;
-	public static long gameDuration = 1 * 60 * 1000;
+	public static long gameDuration = 8 * 60 * 1000;
 	public static Timer timer = new Timer();
 	public static boolean commencing = false;
 	public static Map<String, User> players;
@@ -39,7 +39,7 @@ public class App
     {
     	
         try {
-            jda  = new JDABuilder(AccountType.BOT).setToken("INSERT-YOUR-BOT-TOKEN-HERE").buildBlocking();
+            jda  = new JDABuilder(AccountType.BOT).setToken("INSERT-YOUR-TOKEN-HERE").buildBlocking();
         } catch (LoginException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

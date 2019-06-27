@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import com.noxob.spygame.models.Location;
@@ -33,7 +34,8 @@ public class MessageResponder extends ListenerAdapter {
 				eb.setColor(Color.CYAN);
 				eb.setDescription("***s! start:*** Starts a new round."
 						+ "\n***s! guess <Location Name/Id>:*** Let's spy reveal herself and guess the location."
-						+ "\n***s! blame @username:*** Let's players blame someone of being the spy."
+						+ "\n***s! blame @username:*** Let's players blame someone of being the spy"
+						+ "\n***s! time:*** Shows the remaining time."
 						+ "\n***s! scoreboard:*** Shows the scoreboard."
 						+ "\n***s! clear:*** Clears the scoreboard.");
 				me = eb.build();
@@ -61,7 +63,7 @@ public class MessageResponder extends ListenerAdapter {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-	            if(event.getChannel().getMessageById(ours.getId()).complete().getReactions().get(0).getCount() > 1) {
+	            if(event.getChannel().getMessageById(ours.getId()).complete().getReactions().get(0).getCount() > 2 && event.getChannel().getMessageById(ours.getId()).complete().getReactions().get(0).getCount() < 9) {
 	            	String description = "**Players:** ";
 	            	List<User> voters = event.getChannel().getMessageById(ours.getId()).complete().getReactions().get(0).getUsers().complete();
 	            	
@@ -209,7 +211,7 @@ public class MessageResponder extends ListenerAdapter {
 						App.timer.purge();
 						eb.setTitle(event.getMessage().getAuthor().getName() + " blamed " + event.getMessage().getMentionedUsers().get(0).getName());
 						eb.setColor(Color.CYAN);
-						eb.setDescription("To approve hit: \u2714 \nTo disapprove hit:\u274c \n(You have 10 seconds.)");
+						eb.setDescription("To approve hit: \u2705 \nTo disapprove hit:\u274e \n(Suspect votes doesn't count! You have 10 seconds.)");
 						event.getTextChannel().sendMessage(eb.build()).complete();
 						App.blamers.put(event.getMessage().getAuthor().getId(), true);
 						List<Message> history = event.getChannel().getHistory().retrievePast(10).complete();
@@ -220,22 +222,36 @@ public class MessageResponder extends ListenerAdapter {
 								break;
 							}
 						}
-						ours.addReaction("\u2714").complete();
-						ours.addReaction("\u274c").complete();
+						ours.addReaction("\u2705").complete();
+						ours.addReaction("\u274e").complete();
 						
 						try {
 							Thread.sleep(10 * 1000);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
-						int onay = event.getChannel().getMessageById(ours.getId()).complete().getReactions().get(0).getCount();
-						int ret = event.getChannel().getMessageById(ours.getId()).complete().getReactions().get(1).getCount();
+						int onay = 0;
+						String votes = "";
+						for(User u: event.getChannel().getMessageById(ours.getId()).complete().getReactions().get(0).getUsers()) {
+							if(!u.isBot() && !u.getId().equals(event.getMessage().getMentionedUsers().get(0).getId())) {
+								votes += u.getName() + " \u2705\n";
+								onay++;
+							}
+						}
+						int ret = 0;
+						for(User u: event.getChannel().getMessageById(ours.getId()).complete().getReactions().get(1).getUsers()) {
+							if(!u.isBot() && !u.getId().equals(event.getMessage().getMentionedUsers().get(0).getId())) {
+								votes += u.getName() + " \u274e\n";
+								ret++;
+							}
+						}
 						
 						if(onay > ret) {
 							if(event.getMessage().getMentionedUsers().get(0).getId().equals(App.players.get("Spy").getId())) {
 								eb.setTitle("Non-Spy Victory!");
 								eb.setColor(Color.GREEN);
-								eb.setDescription("Non-Spy players successfully blamed the Spy.\nEveryone gets 1 pts.\n" + event.getMessage().getAuthor().getName() + " gets 2 pts.");
+								eb.setDescription("Non-Spy players successfully blamed the Spy.\nEveryone gets 1 pts.\n" + event.getMessage().getAuthor().getName() + " gets 2 pts."
+										+ "\n\n***Votes:***\n"+ votes);
 								App.players.remove("Spy");
 								for(Map.Entry<String, User> entry: App.players.entrySet()) {
 									if(entry.getValue().getId().equals(event.getMessage().getAuthor().getId())) {
@@ -255,7 +271,8 @@ public class MessageResponder extends ListenerAdapter {
 							App.started = false;
 						}else {
 							eb.setTitle("Vote did not go through!");
-							eb.setDescription("Players decided not to blame this person of being the spy.");
+							eb.setDescription("Players decided not to blame this person of being the spy."
+									+ "\n\n***Votes:***\n" + votes);
 							eb.setColor(Color.CYAN);
 							event.getMessage().getTextChannel().sendMessage(eb.build()).queue();
 							App.startTime = App.startTime + 10 * 1000; // we need to add game 10 more seconds because of voting duration
@@ -264,13 +281,13 @@ public class MessageResponder extends ListenerAdapter {
 						}
 						ours.delete().complete();
 					}else {
-						eb.setTitle("ERROR!");
+						eb.setTitle("Error!");
 						eb.setDescription("You can only blame one person at a time.");
 						eb.setColor(Color.YELLOW);
 						event.getMessage().getTextChannel().sendMessage(eb.build()).queue();
 					}
 				}else {
-					eb.setTitle("ERROR!");
+					eb.setTitle("Error!");
 					eb.setDescription("```s! blame @UserName```");
 					eb.setColor(Color.YELLOW);
 					event.getMessage().getTextChannel().sendMessage(eb.build()).queue();
@@ -290,6 +307,15 @@ public class MessageResponder extends ListenerAdapter {
 				eb.setColor(Color.CYAN);
 				eb.setTitle("Done!");
 				eb.setDescription("Scoreboard has been cleared");
+				event.getTextChannel().sendMessage(eb.build()).queue();
+			}else if("time".equals(command[1]) && App.started) {
+				eb.setColor(Color.CYAN);
+				eb.setTitle("Time Remaining:");
+				long remaining = App.gameDuration - (System.currentTimeMillis() - App.startTime);
+				long minutes = TimeUnit.MILLISECONDS.toMinutes(remaining);
+		        remaining = remaining - minutes * 1000 * 60;
+		        long seconds = TimeUnit.MILLISECONDS.toSeconds(remaining);
+				eb.setDescription(minutes + " minutes " + seconds + " seconds");
 				event.getTextChannel().sendMessage(eb.build()).queue();
 			}
 			
