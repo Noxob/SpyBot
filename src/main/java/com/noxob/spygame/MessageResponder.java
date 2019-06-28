@@ -164,7 +164,7 @@ public class MessageResponder extends ListenerAdapter {
 	            	App.players = players;
 	            	App.currentLocation = current;
 	            	eb.setTitle("Starting the Game!");
-	            	eb.setDescription(description + "\n\n***"+ firstAsker + " is going to start asking first. After that every replier will ask a question to someone of their choice, until the game ends.***");
+	            	eb.setDescription(description + "\n\n***"+ firstAsker + " is going to start asking first. After that every player that answers a question will ask the next question to someone of their choice, until the game ends.***\nMore info: ,```s! help```");
 	            	eb.setColor(Color.CYAN);
 	            	me = eb.build();
 	            	event.getTextChannel().sendMessage(me).queue();
