@@ -184,6 +184,20 @@ public class MessageResponder extends ListenerAdapter {
 				eb.setColor(Color.YELLOW);
 				event.getTextChannel().sendMessage(eb.build()).complete();
 			}else if("guess".equals(command[1]) && App.started) {
+				
+				boolean playing = false;
+				
+				for(Map.Entry<String, User> user: App.players.entrySet()) {
+					if(user.getValue().getId().equals(event.getMessage().getAuthor().getId())) {
+						playing = true;
+						break;
+					}
+				}
+				
+				if(!playing) {
+					return; //the person issuing the command is not playing the game
+				}
+				
 				if(command.length > 2 && !command[2].isEmpty()) {
 					if(event.getMessage().getAuthor().getId().equals(App.players.get("Spy").getId())) {
 						//TODO: CHECK IF THE GUESS WAS CORRECT
@@ -227,6 +241,19 @@ public class MessageResponder extends ListenerAdapter {
 				}
 				
 			}else if("blame".equals(command[1]) && App.started) {
+				
+				boolean playing = false;
+				
+				for(Map.Entry<String, User> user: App.players.entrySet()) {
+					if(user.getValue().getId().equals(event.getMessage().getAuthor().getId())) {
+						playing = true;
+						break;
+					}
+				}
+				
+				if(!playing) {
+					return; //the person issuing the command is not playing the game
+				}
 				
 				
 				if(event.getMessage().getMentionedUsers() != null && !event.getMessage().getMentionedUsers().isEmpty()) {
