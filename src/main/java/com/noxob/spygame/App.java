@@ -39,7 +39,7 @@ public class App
     {
     	
         try {
-            jda  = new JDABuilder(AccountType.BOT).setToken("MzUzNDA2OTMxOTkxNTI3NDM0.DIvTQg.PPEtKX9u-8D6_e0kglJUF-5RmnI").buildBlocking();
+            jda  = new JDABuilder(AccountType.BOT).setToken("INSERT-YOUR-TOKEN-HERE").buildBlocking();
         } catch (LoginException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
