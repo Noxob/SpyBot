@@ -46,6 +46,16 @@ public class MessageResponder extends ListenerAdapter {
 					event.getPrivateChannel().sendMessage(me).queue();;
 			}else if("help".equals(command[1])) {
 				eb.setTitle("How to play?");
+				eb.addField("Summary", "The game contains one spy and at max seven non-spy players. "
+						+ "The identity of the spy is hidden and spy is chosen randomly by the bot. "
+						+ "At the start of the game bot randomly chooses a player as questioner and a location. "
+						+ "Each non-spy player has a secret role that is related to the secret location. "
+						+ "Non-spy players know the secret location but the spy doesn't. "
+						+ "The first questioner asks any question to a player of their choice then player questioned answers the question. "
+						+ "After that every answering player will be the next one who asks the question. "
+						+ "The answers given by the non-spy players should hint the other non-spy players that they know the secret location but it shouldn't reveal the location to the spy. "
+						+ "The game ends in three conditions; when the timer runs out, when spy reveals himself/herself and tries to guess the secret location "
+						+ "or when players decide to accuse someone of being the spy.", false);
 				eb.addField("Objective", "The spy’s objective is to avoid exposure until the end of a given round or identify the current location.\n" + 
 						"The non-spies’ objective is to establish consensus on the identity of the spy and expose him or her.", false);
 				eb.addField("Start of the Round", "You start a round using ```s! start``` command. After you hit the plus reaction on the bot's message, the game will start. "
@@ -61,11 +71,11 @@ public class MessageResponder extends ListenerAdapter {
 						+ "\n***At the Spy’s Request***"
 						+ "\nSpy can reveal himself/herself (s! guess <Location Name/Id>) and guess the location. If he is successful he wins the game.", false);
 				eb.addField("Scoring", "Play the desired number of rounds and scores will be saved to the scoreboard (s! scoreboard).", false);
-				eb.addField("Spy Victory", "The spy earns 2 points if no one is successfully accused of being the spy\n" + 
-						"The spy earns 4 points if a non-spy player is successfully accused of being a spy\n" + 
-						"The spy earns 4 points if the spy stops the game and successfully guesses the location", false);
-				eb.addField("Non-Spy Victory", "***Victory:*** Each non-spy player earns 1 point\n" + 
-						"The player who initiated the successful accusation of the spy earns 2 points instead", false);
+				eb.addField("Spy Victory", "- The spy earns 2 points if no one is successfully accused of being the spy\n" + 
+						"- The spy earns 4 points if a non-spy player is successfully accused of being a spy\n" + 
+						"- The spy earns 4 points if the spy stops the game and successfully guesses the location", false);
+				eb.addField("Non-Spy Victory", "- ***Victory:*** Each non-spy player earns 1 point\n" + 
+						"- The player who initiated the successful accusation of the spy earns 2 points instead", false);
 				eb.addField("Objectives and Strategies", "The objectives of the ***non-spy*** players are to identify the spy and avoid revealing their location.\r\n" + 
 						"\n" + 
 						"Therefore, the non-spies should refrain from being too explicit in their questions: (for example, \"How much cash did the robbers steal yesterday?\" The spy will instantly identify the location as the bank).\r\n" + 
