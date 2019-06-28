@@ -26,15 +26,6 @@
             <name>bintray</name>
             <url>http://jcenter.bintray.com</url>
         </repository>
-
-        <repository>
-            <id>system-hook-mvn-repo</id>
-            <url>https://raw.github.com/kristian/system-hook/mvn-repo/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -42,32 +33,6 @@
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
             <version>3.6.0_356</version>
-        </dependency>
-
-        <dependency>
-            <!-- jsoup HTML parser library @ https://jsoup.org/ -->
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-            <version>1.11.3</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.json/json -->
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20180130</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sedmelluq</groupId>
-            <artifactId>lavaplayer</artifactId>
-            <version>1.2.63</version>
-        </dependency>
-
-        <dependency>
-            <groupId>lc.kra.system</groupId>
-            <artifactId>system-hook</artifactId>
-            <version>3.2</version>
         </dependency>
     </dependencies>
 
@@ -106,7 +71,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>Main</mainClass> <!-- You have to replace this with a path to your main class like my.path.Main -->
+                            <mainClass>com.noxob.spygame.App</mainClass> <!-- You have to replace this with a path to your main class like my.path.Main -->
                         </manifest>
                     </archive>
                     <descriptorRefs>
