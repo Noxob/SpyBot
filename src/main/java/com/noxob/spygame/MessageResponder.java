@@ -15,6 +15,7 @@ import com.noxob.spygame.util.Utils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageEmbed;
+import net.dv8tion.jda.core.entities.MessageEmbed.Field;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -29,20 +30,42 @@ public class MessageResponder extends ListenerAdapter {
 		MessageEmbed me = null;
 		
 		if("s!".equals(command[0])) {
-			if("help".equals(command[1])) {
-				eb.setTitle("How to play:");
+			if("commands".equals(command[1])) {
+				eb.setTitle("Available Commands");
 				eb.setColor(Color.CYAN);
-				eb.setDescription("***s! start:*** Starts a new round."
-						+ "\n***s! guess <Location Name/Id>:*** Let's spy reveal herself and guess the location."
-						+ "\n***s! blame @username:*** Let's players blame someone of being the spy"
-						+ "\n***s! time:*** Shows the remaining time."
-						+ "\n***s! scoreboard:*** Shows the scoreboard."
-						+ "\n***s! clear:*** Clears the scoreboard.");
+				eb.addField("s! start", "Starts a new round.", false);
+				eb.addField("s! guess <Location Name/Id>", " Let's spy reveal himself/herself and guess the location.", false);
+				eb.addField("s! blame @username", "Let's players blame someone of being the spy.", false);
+				eb.addField("s! time", "Shows the remaining time.", false);
+				eb.addField("s! scoreboard", "Shows the scoreboard.", false);
+				eb.addField("s! clear", "Clears the scoreboard.", false);
 				me = eb.build();
 				if(event.getChannelType().isGuild())
 					event.getTextChannel().sendMessage(me).queue();
 				else
 					event.getPrivateChannel().sendMessage(me).queue();;
+			}else if("help".equals(command[1])) {
+				eb.setTitle("How to play?");
+				eb.addField("Objective", "The spy’s objective is to avoid exposure until the end of a given round or identify the current location.\n" + 
+						"The non-spies’ objective is to establish consensus on the identity of the spy and expose him or her.", false);
+				eb.addField("End of the Round", "A round ends when one of the following three things happen:"
+						+ "\n***1. Eight minutes have passed***"
+						+ "\nWhen timer runs out the spy wins the round."
+						+ "\n***When a Player Gets Suspicious***"
+						+ "\nWhen a player gets suspicious he/she can blame another player (s! blame @username) for being the spy, this will pause the timer and start a poll. If the poll passes and the accused player found guilty,"
+						+ "Non-Spy players win the game if the accused is the actual spy otherwise they lose the game."
+						+ "\n***At the Spy’s Request***"
+						+ "\nSpy can reveal himself/herself (s! guess <Location Name/Id>) and guess the location. If he is successful he wins the game.", false);
+				eb.addField("Scoring", "Play the desired number of rounds and scores will be saved to the scoreboard (s! scoreboard).", false);
+				eb.addField("Spy Victory", "The spy earns 2 points if no one is successfully accused of being the spy\n" + 
+						"The spy earns 4 points if a non-spy player is successfully accused of being a spy\n" + 
+						"The spy earns 4 points if the spy stops the game and successfully guesses the location", false);
+				eb.addField("Non-Spy Victory", "***Victory:*** Each non-spy player earns 1 point\n" + 
+						"The player who initiated the successful accusation of the spy earns 2 points instead", false);
+				eb.addField("Full List of Commands", "```s! commands```", false);
+				eb.setColor(Color.CYAN);
+				event.getTextChannel().sendMessage(eb.build()).queue();;
+				
 			}else if("start".equals(command[1]) && !App.started) {
 				eb.setTitle("Game Starting!");
 				eb.setDescription("To be able to start playing, hit the plus reaction and wait.");

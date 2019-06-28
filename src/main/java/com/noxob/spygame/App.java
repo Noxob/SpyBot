@@ -39,14 +39,14 @@ public class App
     {
     	
         try {
-            jda  = new JDABuilder(AccountType.BOT).setToken("INSERT-YOUR-TOKEN-HERE").buildBlocking(); 
-        } catch (LoginException e) { 
+            jda  = new JDABuilder(AccountType.BOT).setToken("MzUzNDA2OTMxOTkxNTI3NDM0.DIvTQg.PPEtKX9u-8D6_e0kglJUF-5RmnI").buildBlocking();
+        } catch (LoginException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         initLocations();
-        jda.getPresence().setGame(Game.playing("Spy Game"));
+        jda.getPresence().setGame(Game.playing("s! help"));
         jda.addEventListener(new MessageResponder());
     }
     
