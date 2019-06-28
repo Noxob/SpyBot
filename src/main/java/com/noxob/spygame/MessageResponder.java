@@ -48,6 +48,10 @@ public class MessageResponder extends ListenerAdapter {
 				eb.setTitle("How to play?");
 				eb.addField("Objective", "The spy’s objective is to avoid exposure until the end of a given round or identify the current location.\n" + 
 						"The non-spies’ objective is to establish consensus on the identity of the spy and expose him or her.", false);
+				eb.addField("Start of the Round", "You start a round using ```s! start``` command. After you hit the plus reaction on the bot's message, the game will start. "
+						+ "Bot is going to choose a random player who will ask the first question to any player he/she chooses. "
+						+ "Every player who answers the question proceeds to ask any other player a question of their own, "
+						+ "but cannot ask a question of the player who just asked them a question.", false);
 				eb.addField("End of the Round", "A round ends when one of the following three things happen:"
 						+ "\n***1. Eight minutes have passed***"
 						+ "\nWhen timer runs out the spy wins the round."
@@ -62,13 +66,20 @@ public class MessageResponder extends ListenerAdapter {
 						"The spy earns 4 points if the spy stops the game and successfully guesses the location", false);
 				eb.addField("Non-Spy Victory", "***Victory:*** Each non-spy player earns 1 point\n" + 
 						"The player who initiated the successful accusation of the spy earns 2 points instead", false);
+				eb.addField("Objectives and Strategies", "The objectives of the ***non-spy*** players are to identify the spy and avoid revealing their location.\r\n" + 
+						"\n" + 
+						"Therefore, the non-spies should refrain from being too explicit in their questions: (for example, \"How much cash did the robbers steal yesterday?\" The spy will instantly identify the location as the bank).\r\n" + 
+						"\n" + 
+						"However, when a player’s questions and answers are too vague, other players might start suspecting them of being the spy, enabling the real spy to win.\r\n" + 
+						"\n" + 
+						"The ***spy’s*** objective is to listen as carefully as possible to what the other players say and do their best to avoid blowing their cover while also trying to identify the location before eight minutes have passed. A spy who doesn’t attempt to guess the location is taking a risk — it is entirely possible that the other players will identify them after discussion and voting.", false);
 				eb.addField("Full List of Commands", "```s! commands```", false);
 				eb.setColor(Color.CYAN);
 				event.getTextChannel().sendMessage(eb.build()).queue();;
 				
 			}else if("start".equals(command[1]) && !App.started) {
 				eb.setTitle("Game Starting!");
-				eb.setDescription("To be able to start playing, hit the plus reaction and wait.");
+				eb.setDescription("If you want to join the game, click the plus reaction below.");
 				eb.setColor(Color.CYAN);
 				me = eb.build();
 				event.getTextChannel().sendMessage(me).complete();
@@ -86,12 +97,24 @@ public class MessageResponder extends ListenerAdapter {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-	            if(event.getChannel().getMessageById(ours.getId()).complete().getReactions().get(0).getCount() > 2 && event.getChannel().getMessageById(ours.getId()).complete().getReactions().get(0).getCount() < 9) {
+	            if(event.getChannel().getMessageById(ours.getId()).complete().getReactions().get(0).getCount() > 2) {
 	            	String description = "**Players:** ";
 	            	List<User> voters = event.getChannel().getMessageById(ours.getId()).complete().getReactions().get(0).getUsers().complete();
+	            	voters.removeIf(u -> u.isBot());
 	            	
 	            	Location current = App.locations.get((int) (Math.random() * App.locations.size()));
 	            	Map<String, User> players = new HashMap<>();
+	            	
+	            	if(voters.size() > 8) {
+	            		while(voters.size() > 8) {
+	            			voters.remove(voters.size() - 1);
+	            		}
+	            		eb.setTitle("More than 8 players joined!");
+	            		eb.setDescription("The first 8 players will be able to play the game");
+	            		eb.setColor(Color.YELLOW);
+	            		event.getTextChannel().sendMessage(eb.build()).queue();
+	            	}
+	            	
 	            	for(int i = 0; i < voters.size(); i++) {
 	            		if(!voters.get(i).isBot()) {
 	            			description += "\n" + voters.get(i).getName();
