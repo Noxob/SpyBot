@@ -8,7 +8,7 @@ The game contains one spy and at max seven non-spy players. The identity of the 
 # Made for Discord Hack Week #1
 ![Discord Hack Week](https://cdn-images-1.medium.com/max/2560/1*lh6NS8hx0pu5mlZeSqnu5w.jpeg)
 
-# How to use
+# How to host the bot
 - Replace the string that reads `INSERT-YOUR-TOKEN-HERE` in the `com.noxob.spygame.App.java` class with your Discord bot token then compile the project and run it.
 
 - To see a full list of available commands, type `s! commands` on the Discord server that you added your bot to.
