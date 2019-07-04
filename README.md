@@ -19,6 +19,8 @@ The game contains one spy and at max seven non-spy players. The identity of the 
 - [Java](https://www.java.com/)
 - [JDA](https://github.com/DV8FromTheWorld/JDA)
 
+# Goal
+My goal is to make this bot usable by more than one group/server at the same time. The bot does not support multiple servers yet so you will have to host it on your own machine to play the game.
 
 # Disclaimer
 I have no connection to creators of the game SpyFall.
